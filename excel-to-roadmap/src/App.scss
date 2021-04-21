@@ -18,11 +18,9 @@ body,
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
         box-shadow: 0 10px 14px #e6e6e6;
         position: relative;
         z-index: 2;
-
         background-image: url(https://wac-cdn.atlassian.com/dam/jcr:e62e6b1b-9430-4eda-a733-0a053b2f5864/map-road-right.png?cdnVersion=1563),
             url(https://wac-cdn.atlassian.com/dam/jcr:1437a9b6-36ee-4c2a-9a46-82580072e551/map-road-left.png?cdnVersion=1563);
         background-position: right center, left center;
@@ -44,9 +42,11 @@ body,
             line-height: 1.4;
             margin-bottom: 40px;
         }
+
         input[type="file"] {
             display: none;
         }
+
         .custom-file-upload {
             border: 1px solid #ccc;
             padding: 8px 24px;
@@ -66,6 +66,7 @@ body,
             background-repeat: no-repeat;
         }
     }
+
     .contentPanel {
         display: flex;
         flex-direction: column;
@@ -86,6 +87,7 @@ body,
                 color: #253858;
                 margin-top: 0;
             }
+
             button {
                 display: block;
                 padding: 8px 16px;
@@ -105,10 +107,11 @@ body,
         }
 
         .catagory {
+            width: 800px;
+
             h2 {
                 margin-top: 50px;
             }
-            width: 800px;
 
             .item {
                 box-shadow: 1px 1px 6px 0 #bbb;

@@ -45,7 +45,6 @@ class App extends Component {
       let fileObj = event.target.files[0];
       let fileName = fileObj.name;
 
-
       //check for file extension and pass only if it is .xlsx and display error message otherwise
       if (fileName.slice(fileName.lastIndexOf('.') + 1) === "xlsx") {
         this.setState({
@@ -88,7 +87,6 @@ class App extends Component {
     });
   }
 
-
   render() {
     return (
       <div className='container'>
@@ -103,11 +101,11 @@ class App extends Component {
           <div className='contentPanel'>
             <div className='statusFilter'>
               <h4>Stauts:</h4>
-            <button onClick={() => this.handleFilterChagne('')} className={this.state.filter == '' ? 'selected' : ''}>All</button>
-            <button onClick={() => this.handleFilterChagne(STATUS_MAP.shipped)} className={this.state.filter == STATUS_MAP.shipped ? 'selected' : ''}>Shipped</button>
-            <button onClick={() => this.handleFilterChagne(STATUS_MAP.comingSoon)} className={this.state.filter == STATUS_MAP.comingSoon ? 'selected' : ''}>Coming soon</button>
-            <button onClick={() => this.handleFilterChagne(STATUS_MAP.inTheWorks)} className={this.state.filter == STATUS_MAP.inTheWorks ? 'selected' : ''}>In the works</button>
-</div>
+              <button onClick={() => this.handleFilterChagne('')} className={this.state.filter == '' ? 'selected' : ''}>All</button>
+              <button onClick={() => this.handleFilterChagne(STATUS_MAP.shipped)} className={this.state.filter == STATUS_MAP.shipped ? 'selected' : ''}>Shipped</button>
+              <button onClick={() => this.handleFilterChagne(STATUS_MAP.comingSoon)} className={this.state.filter == STATUS_MAP.comingSoon ? 'selected' : ''}>Coming soon</button>
+              <button onClick={() => this.handleFilterChagne(STATUS_MAP.inTheWorks)} className={this.state.filter == STATUS_MAP.inTheWorks ? 'selected' : ''}>In the works</button>
+            </div>
             {
               this.getUniqueItems(this.state.rows).map(catagory => {
                 return <div className='catagory'>
@@ -131,12 +129,8 @@ class App extends Component {
           <div className='emptyState'>
           </div>}
         <div className='footer'>
-          <p>
-            Copyright © 2021 ConnectWise
-            </p>
-          <span>
-            Build by Meng Huang
-            </span>
+          <p>Copyright © 2021 ConnectWise</p>
+          <span>Build by Meng Huang</span>
         </div>
       </div>
     );
