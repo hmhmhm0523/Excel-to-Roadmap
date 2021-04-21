@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './App.scss';
 import { OutTable, ExcelRenderer } from 'react-excel-renderer';
 
 class App extends Component {
@@ -65,36 +65,73 @@ class App extends Component {
     });
   }
 
-  
+
   onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
 
-render() {
-  return (
-    <div>
-        <input type="file" onChange={this.fileHandler.bind(this)} ref={this.fileInput} onClick={(event) => { event.target.value = null }} />
-        {this.state.dataLoaded &&
-          <div>
+  getUniqueItems(object) {
+    return object.map((item) => { return item[0] }).slice(1).filter(this.onlyUnique);
+  }
 
-            <div><ul>
-              {
-               
-                this.state.rows.map((item, key) => {
-                  return <li key={key}>
-                    <h3>{item[0]}</h3>
-                    <h4>{item[1]}</h4>
-                    <span>{item[2]}</span>
-                    <p>{item[3]}</p>
-                  </li>
-                })
-              }
-            </ul></div>
-            <OutTable data={this.state.rows} columns={this.state.cols} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />
+  statusTagPicker(str) {
+    if (str == '21-Q1')
+      return 'Shipped';
+    else if (str == '21-Q2')
+      return 'ComingSoon';
+    else if (str == '21-Q3')
+      return 'InTheWorks';
+    else
+      return '';
+  }
+
+  render() {
+    return (
+      <div className='container'>
+        <div className='header'>
+          <div className='logo'></div>
+          <h1>ConnectWise Roadmap</h1>
+          <p>Please upload an excel file here to view roadmap.</p>
+          <label for="file-upload" class="custom-file-upload">Upload Excel</label>
+          <input id="file-upload" type="file" onChange={this.fileHandler.bind(this)} ref={this.fileInput} onClick={(event) => { event.target.value = null }} />
+        </div>
+        {this.state.dataLoaded &&
+          <div className='contentPanel'>
+            {
+              this.getUniqueItems(this.state.rows).map(catagory => {
+                return <div className='catagory'>
+                  <h2>{catagory}</h2>
+                  <div>
+                    {this.state.rows.filter((item) => { return item[0] === catagory }).map((it) => {
+                      return <div className='item'>
+                        <span className={'is' + this.statusTagPicker(it[2])}>{it[2]}</span>
+                        <span className='shipped'>SHIPPED</span>
+                        <span className='comingSoon'>COMING SOON</span>
+                        <span className='inTheWorks'>IN THE WORKS</span>
+                        <h4>{it[1]}</h4>
+                        <p>{it[3]}</p>
+                      </div>
+                    })}
+
+                  </div>
+                </div>
+              })
+            }
           </div>}
-    </div>
-  );
-}
+        {!this.state.dataLoaded &&
+          <div className='emptyState'>
+          </div>}
+        <div className='footer'>
+          <p>
+            Copyright © 2021 ConnectWise
+            </p>
+          <span>
+            Build by Meng Huang
+            </span>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
