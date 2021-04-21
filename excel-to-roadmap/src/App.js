@@ -123,7 +123,7 @@ class App extends Component {
                 <div className='filter'>
                   <h4>Stauts:</h4>
                   <div>
-                    <button key={'All'} onClick={() => this.handleStatusFilterChagne('')} className={this.state.statusFilter === '' ? 'selected' : ''}>All</button>
+                    <button key={'All'} onClick={() => this.handleStatusFilterChagne('')} className={this.state.statusFilter === '' ? 'selected' : ''}>All Status</button>
                     <button key={'Shipped'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.shipped)} className={this.state.statusFilter === STATUS_MAP.shipped ? 'selected' : ''}>Shipped</button>
                     <button key={'ComingSoon'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.comingSoon)} className={this.state.statusFilter === STATUS_MAP.comingSoon ? 'selected' : ''}>Coming soon</button>
                     <button key={'InTheWorks'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.inTheWorks)} className={this.state.statusFilter === STATUS_MAP.inTheWorks ? 'selected' : ''}>In the works</button>
@@ -133,15 +133,12 @@ class App extends Component {
                 <div className='filter'>
                   <h4>Catagory:</h4>
                   <div>
-
-                    <button onClick={() => this.handleCatagoryFilterChagne('')} className={this.state.catagoryFilter === '' ? 'selected' : ''}>All</button>
+                    <button onClick={() => this.handleCatagoryFilterChagne('')} className={this.state.catagoryFilter === '' ? 'selected' : ''}>All Catagory</button>
                     {Object.keys(CATAGORY_MAP).map((catagory) => {
                       return <button key={catagory.toString()} onClick={() => this.handleCatagoryFilterChagne(CATAGORY_MAP[catagory])} className={this.state.catagoryFilter === CATAGORY_MAP[catagory] ? 'selected' : ''}>{CATAGORY_MAP[catagory]}</button>
                     })}
                   </div>
-
                 </div>
-
               </div>
               <div className='mainPanel'>
                 {
@@ -175,6 +172,7 @@ class App extends Component {
         {!this.state.dataLoaded &&
           <div className='emptyState'>
           </div>}
+          
         <div className='footer'>
           <p>Copyright © 2021 ConnectWise</p>
           <span>Build by Meng Huang</span>
