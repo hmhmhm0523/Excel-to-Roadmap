@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import './App.scss';
 import { OutTable, ExcelRenderer } from 'react-excel-renderer';
 
+const STATUS_MAP = {
+  shipped: '21-Q1',
+  comingSoon: '21-Q2',
+  inTheWorks: '21-Q3',
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -10,10 +16,10 @@ class App extends Component {
       dataLoaded: false,
       isFormInvalid: false,
       rows: null,
-      cols: null
+      cols: null,
+      filter: ''
     }
     this.fileHandler = this.fileHandler.bind(this);
-    this.toggle = this.toggle.bind(this);
     this.renderFile = this.renderFile.bind(this);
     this.fileInput = React.createRef();
   }
@@ -25,8 +31,6 @@ class App extends Component {
         console.log(err);
       }
       else {
-        console.log(Object.entries(resp.rows))
-        console.table(resp.rows)
         this.setState({
           dataLoaded: true,
           cols: resp.cols,
@@ -59,13 +63,6 @@ class App extends Component {
     }
   }
 
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-
-
   onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
@@ -75,15 +72,22 @@ class App extends Component {
   }
 
   statusTagPicker(str) {
-    if (str == '21-Q1')
+    if (str == STATUS_MAP.shipped)
       return 'Shipped';
-    else if (str == '21-Q2')
+    else if (str == STATUS_MAP.comingSoon)
       return 'ComingSoon';
-    else if (str == '21-Q3')
+    else if (str == STATUS_MAP.inTheWorks)
       return 'InTheWorks';
     else
       return '';
   }
+
+  handleFilterChagne(filterText) {
+    this.setState({
+      filter: filterText
+    });
+  }
+
 
   render() {
     return (
@@ -97,23 +101,28 @@ class App extends Component {
         </div>
         {this.state.dataLoaded &&
           <div className='contentPanel'>
+            <div className='statusFilter'>
+              <h4>Stauts:</h4>
+            <button onClick={() => this.handleFilterChagne('')} className={this.state.filter == '' ? 'selected' : ''}>All</button>
+            <button onClick={() => this.handleFilterChagne(STATUS_MAP.shipped)} className={this.state.filter == STATUS_MAP.shipped ? 'selected' : ''}>Shipped</button>
+            <button onClick={() => this.handleFilterChagne(STATUS_MAP.comingSoon)} className={this.state.filter == STATUS_MAP.comingSoon ? 'selected' : ''}>Coming soon</button>
+            <button onClick={() => this.handleFilterChagne(STATUS_MAP.inTheWorks)} className={this.state.filter == STATUS_MAP.inTheWorks ? 'selected' : ''}>In the works</button>
+</div>
             {
               this.getUniqueItems(this.state.rows).map(catagory => {
                 return <div className='catagory'>
                   <h2>{catagory}</h2>
-                  <div>
-                    {this.state.rows.filter((item) => { return item[0] === catagory }).map((it) => {
-                      return <div className='item'>
-                        <span className={'is' + this.statusTagPicker(it[2])}>{it[2]}</span>
-                        <span className='shipped'>SHIPPED</span>
-                        <span className='comingSoon'>COMING SOON</span>
-                        <span className='inTheWorks'>IN THE WORKS</span>
-                        <h4>{it[1]}</h4>
-                        <p>{it[3]}</p>
-                      </div>
-                    })}
-
-                  </div>
+                  {this.state.rows.filter((item) => { return item[0] === catagory }).filter((item) => { return this.state.filter ? item[2] === this.state.filter : true }).map((it) => {
+                    return <div className='item'>
+                      <span className={'is' + this.statusTagPicker(it[2])}>{it[2]}</span>
+                      <span className='shipped'>SHIPPED</span>
+                      <span className='comingSoon'>COMING SOON</span>
+                      <span className='inTheWorks'>IN THE WORKS</span>
+                      <h4>{it[1]}</h4>
+                      <p>{it[3]}</p>
+                    </div>
+                  })}
+                  <p className='emptyStateText'>No item in this catagory</p>
                 </div>
               })
             }
