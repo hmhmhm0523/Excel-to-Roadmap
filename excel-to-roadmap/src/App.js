@@ -6,7 +6,16 @@ const STATUS_MAP = {
   shipped: '21-Q1',
   comingSoon: '21-Q2',
   inTheWorks: '21-Q3',
+  future: '21-Q4'
 };
+
+const CATAGORY_MAP = {
+  unifiedManagement: 'Unified Management',
+  securityManagement: 'Security Management',
+  businessManagement: 'Business Management',
+  expertServices: 'Expert Services',
+  platformServices: 'Platform Services'
+}
 
 class App extends Component {
   constructor(props) {
@@ -17,7 +26,8 @@ class App extends Component {
       isFormInvalid: false,
       rows: null,
       cols: null,
-      filter: ''
+      statusFilter: '',
+      catagoryFilter: ''
     }
     this.fileHandler = this.fileHandler.bind(this);
     this.renderFile = this.renderFile.bind(this);
@@ -31,6 +41,7 @@ class App extends Component {
         console.log(err);
       }
       else {
+        console.log(JSON.stringify(resp.rows));
         this.setState({
           dataLoaded: true,
           cols: resp.cols,
@@ -71,19 +82,27 @@ class App extends Component {
   }
 
   statusTagPicker(str) {
-    if (str == STATUS_MAP.shipped)
+    if (str === STATUS_MAP.shipped)
       return 'Shipped';
-    else if (str == STATUS_MAP.comingSoon)
+    else if (str === STATUS_MAP.comingSoon)
       return 'ComingSoon';
-    else if (str == STATUS_MAP.inTheWorks)
+    else if (str === STATUS_MAP.inTheWorks)
       return 'InTheWorks';
+    else if (str === STATUS_MAP.future)
+      return 'Future';
     else
       return '';
   }
 
-  handleFilterChagne(filterText) {
+  handleStatusFilterChagne(statusFilterText) {
     this.setState({
-      filter: filterText
+      statusFilter: statusFilterText
+    });
+  }
+
+  handleCatagoryFilterChagne(catagoryFilterText) {
+    this.setState({
+      catagoryFilter: catagoryFilterText
     });
   }
 
@@ -94,37 +113,65 @@ class App extends Component {
           <div className='logo'></div>
           <h1>ConnectWise Roadmap</h1>
           <p>Please upload an excel file here to view roadmap.</p>
-          <label for="file-upload" class="custom-file-upload">Upload Excel</label>
+          <label htmlFor="file-upload" className="custom-file-upload">Upload Excel</label>
           <input id="file-upload" type="file" onChange={this.fileHandler.bind(this)} ref={this.fileInput} onClick={(event) => { event.target.value = null }} />
         </div>
         {this.state.dataLoaded &&
           <div className='contentPanel'>
-            <div className='statusFilter'>
-              <h4>Stauts:</h4>
-              <button onClick={() => this.handleFilterChagne('')} className={this.state.filter == '' ? 'selected' : ''}>All</button>
-              <button onClick={() => this.handleFilterChagne(STATUS_MAP.shipped)} className={this.state.filter == STATUS_MAP.shipped ? 'selected' : ''}>Shipped</button>
-              <button onClick={() => this.handleFilterChagne(STATUS_MAP.comingSoon)} className={this.state.filter == STATUS_MAP.comingSoon ? 'selected' : ''}>Coming soon</button>
-              <button onClick={() => this.handleFilterChagne(STATUS_MAP.inTheWorks)} className={this.state.filter == STATUS_MAP.inTheWorks ? 'selected' : ''}>In the works</button>
-            </div>
-            {
-              this.getUniqueItems(this.state.rows).map(catagory => {
-                return <div className='catagory'>
-                  <h2>{catagory}</h2>
-                  {this.state.rows.filter((item) => { return item[0] === catagory }).filter((item) => { return this.state.filter ? item[2] === this.state.filter : true }).map((it) => {
-                    return <div className='item'>
-                      <span className={'is' + this.statusTagPicker(it[2])}>{it[2]}</span>
-                      <span className='shipped'>SHIPPED</span>
-                      <span className='comingSoon'>COMING SOON</span>
-                      <span className='inTheWorks'>IN THE WORKS</span>
-                      <h4>{it[1]}</h4>
-                      <p>{it[3]}</p>
-                    </div>
-                  })}
-                  <p className='emptyStateText'>No item in this catagory</p>
+            <div className='wraper'>
+              <div className='sidePanel'>
+                <div className='filter'>
+                  <h4>Stauts:</h4>
+                  <div>
+                    <button key={'All'} onClick={() => this.handleStatusFilterChagne('')} className={this.state.statusFilter === '' ? 'selected' : ''}>All</button>
+                    <button key={'Shipped'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.shipped)} className={this.state.statusFilter === STATUS_MAP.shipped ? 'selected' : ''}>Shipped</button>
+                    <button key={'ComingSoon'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.comingSoon)} className={this.state.statusFilter === STATUS_MAP.comingSoon ? 'selected' : ''}>Coming soon</button>
+                    <button key={'InTheWorks'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.inTheWorks)} className={this.state.statusFilter === STATUS_MAP.inTheWorks ? 'selected' : ''}>In the works</button>
+                    <button key={'Future'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.future)} className={this.state.statusFilter === STATUS_MAP.future ? 'selected' : ''}>Future</button>
+                  </div>
                 </div>
-              })
-            }
+                <div className='filter'>
+                  <h4>Catagory:</h4>
+                  <div>
+
+                    <button onClick={() => this.handleCatagoryFilterChagne('')} className={this.state.catagoryFilter === '' ? 'selected' : ''}>All</button>
+                    {Object.keys(CATAGORY_MAP).map((catagory) => {
+                      return <button key={catagory.toString()} onClick={() => this.handleCatagoryFilterChagne(CATAGORY_MAP[catagory])} className={this.state.catagoryFilter === CATAGORY_MAP[catagory] ? 'selected' : ''}>{CATAGORY_MAP[catagory]}</button>
+                    })}
+                  </div>
+
+                </div>
+
+              </div>
+              <div className='mainPanel'>
+                {
+                  this.getUniqueItems(this.state.rows)
+                    .filter((catagory) => { return this.state.catagoryFilter ? catagory === this.state.catagoryFilter : true })
+                    .map(catagory => {
+                      return <div key={catagory.toString()} className='catagory'>
+                        <h2>{catagory}</h2>
+                        {this.state.rows
+                          .filter((item) => { return this.state.catagoryFilter ? item[0] === this.state.catagoryFilter : item[0] === catagory })
+                          .filter((item) => { return this.state.statusFilter ? item[2] === this.state.statusFilter : true })
+                          .map((it) => {
+                            return <div kep={it.toString()} className='item'>
+                              <span className={'is' + this.statusTagPicker(it[2])}>{it[2]}</span>
+                              <span className='shipped'>SHIPPED</span>
+                              <span className='comingSoon'>COMING SOON</span>
+                              <span className='inTheWorks'>IN THE WORKS</span>
+                              <span className='future'>FUTURE</span>
+                              <h4>{it[1]}</h4>
+                              <p>{it[3]}</p>
+                            </div>
+                          })}
+                        <p className='emptyStateText'>No item in this catagory</p>
+                      </div>
+                    })
+                }
+              </div>
+            </div>
           </div>}
+
         {!this.state.dataLoaded &&
           <div className='emptyState'>
           </div>}
