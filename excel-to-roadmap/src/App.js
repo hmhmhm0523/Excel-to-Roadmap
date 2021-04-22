@@ -10,7 +10,7 @@ const STATUS_MAP = {
   future: '22-Q1'
 };
 
-const CATAGORY_MAP = {
+const CATEGORY_MAP = {
   unifiedManagement: 'Unified Management',
   securityManagement: 'Security Management',
   businessManagement: 'Business Management',
@@ -28,7 +28,7 @@ class App extends Component {
       rows: data,
       cols: null,
       statusFilter: '',
-      catagoryFilter: ''
+      categoryFilter: ''
     }
     this.fileHandler = this.fileHandler.bind(this);
     this.renderFile = this.renderFile.bind(this);
@@ -100,9 +100,9 @@ class App extends Component {
     });
   }
 
-  handleCatagoryFilterChagne(catagoryFilterText) {
+  handleCategoryFilterChagne(categoryFilterText) {
     this.setState({
-      catagoryFilter: catagoryFilterText
+      categoryFilter: categoryFilterText
     });
   }
 
@@ -121,7 +121,7 @@ class App extends Component {
             <div className='wraper'>
               <div className='sidePanel'>
                 <div className='filter'>
-                  <h4>Stauts:</h4>
+                  <h4>Status:</h4>
                   <div>
                     <button key={'All'} onClick={() => this.handleStatusFilterChagne('')} className={this.state.statusFilter === '' ? 'selected' : ''}>All Status</button>
                     <button key={'Shipped'} onClick={() => this.handleStatusFilterChagne(STATUS_MAP.shipped)} className={this.state.statusFilter === STATUS_MAP.shipped ? 'selected' : ''}>Shipped</button>
@@ -131,11 +131,11 @@ class App extends Component {
                   </div>
                 </div>
                 <div className='filter'>
-                  <h4>Catagory:</h4>
+                  <h4>Category:</h4>
                   <div>
-                    <button onClick={() => this.handleCatagoryFilterChagne('')} className={this.state.catagoryFilter === '' ? 'selected' : ''}>All Catagory</button>
-                    {Object.keys(CATAGORY_MAP).map((catagory) => {
-                      return <button key={catagory ? catagory.toString() : 'unknown'} onClick={() => this.handleCatagoryFilterChagne(CATAGORY_MAP[catagory])} className={this.state.catagoryFilter === CATAGORY_MAP[catagory] ? 'selected' : ''}>{CATAGORY_MAP[catagory]}</button>
+                    <button onClick={() => this.handleCategoryFilterChagne('')} className={this.state.categoryFilter === '' ? 'selected' : ''}>All Category</button>
+                    {Object.keys(CATEGORY_MAP).map((category) => {
+                      return <button key={category ? category.toString() : 'unknown'} onClick={() => this.handleCategoryFilterChagne(CATEGORY_MAP[category])} className={this.state.categoryFilter === CATEGORY_MAP[category] ? 'selected' : ''}>{CATEGORY_MAP[category]}</button>
                     })}
                   </div>
                 </div>
@@ -143,12 +143,12 @@ class App extends Component {
               <div className='mainPanel'>
                 {
                   this.getUniqueItems(this.state.rows)
-                    .filter((catagory) => { return this.state.catagoryFilter ? catagory === this.state.catagoryFilter : true })
-                    .map(catagory => {
-                      return <div key={catagory ? catagory.toString() : 'unknown'} className='catagory'>
-                        <h2>{catagory}</h2>
+                    .filter((category) => { return this.state.categoryFilter ? category === this.state.categoryFilter : true })
+                    .map(category => {
+                      return <div key={category ? category.toString() : 'unknown'} className='category'>
+                        <h2>{category}</h2>
                         {this.state.rows
-                          .filter((item) => { return this.state.catagoryFilter ? item[0] === this.state.catagoryFilter : item[0] === catagory })
+                          .filter((item) => { return this.state.categoryFilter ? item[0] === this.state.categoryFilter : item[0] === category })
                           .filter((item) => { return this.state.statusFilter ? this.state.statusFilter.indexOf(item[2]) != -1 : true })
                           .map((it) => {
                             return <div kep={it.toString()} className='item'>
@@ -161,7 +161,7 @@ class App extends Component {
                               <p>{it[3]}</p>
                             </div>
                           })}
-                        <p className='emptyStateText'>No item in this catagory</p>
+                        <p className='emptyStateText'>No item in this category</p>
                       </div>
                     })
                 }
