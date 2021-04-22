@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import { ExcelRenderer } from 'react-excel-renderer';
+import { data } from './data';
 
 const STATUS_MAP = {
   shipped: '21-Q1',
@@ -22,9 +23,9 @@ class App extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      dataLoaded: false,
+      dataLoaded: true,
       isFormInvalid: false,
-      rows: null,
+      rows: data,
       cols: null,
       statusFilter: '',
       catagoryFilter: ''
@@ -41,7 +42,8 @@ class App extends Component {
         console.log(err);
       }
       else {
-        console.log(JSON.stringify(resp.rows));
+        // console.log(JSON.stringify(this.state.rows));
+        // console.log(JSON.stringify(resp.rows));
         this.setState({
           dataLoaded: true,
           cols: resp.cols,
@@ -112,7 +114,7 @@ class App extends Component {
         <div className='header'>
           <div className='logo'></div>
           <h1>ConnectWise Roadmap</h1>
-          <p>Please upload an excel file here to view roadmap.</p>
+          <p>Upload an excel file here to view a differnt roadmap.</p>
           <label htmlFor="file-upload" className="custom-file-upload">Upload Excel</label>
           <input id="file-upload" type="file" onChange={this.fileHandler.bind(this)} ref={this.fileInput} onClick={(event) => { event.target.value = null }} />
         </div>
@@ -135,7 +137,7 @@ class App extends Component {
                   <div>
                     <button onClick={() => this.handleCatagoryFilterChagne('')} className={this.state.catagoryFilter === '' ? 'selected' : ''}>All Catagory</button>
                     {Object.keys(CATAGORY_MAP).map((catagory) => {
-                      return <button key={catagory.toString()} onClick={() => this.handleCatagoryFilterChagne(CATAGORY_MAP[catagory])} className={this.state.catagoryFilter === CATAGORY_MAP[catagory] ? 'selected' : ''}>{CATAGORY_MAP[catagory]}</button>
+                      return <button key={catagory ? catagory.toString() : 'unknown'} onClick={() => this.handleCatagoryFilterChagne(CATAGORY_MAP[catagory])} className={this.state.catagoryFilter === CATAGORY_MAP[catagory] ? 'selected' : ''}>{CATAGORY_MAP[catagory]}</button>
                     })}
                   </div>
                 </div>
@@ -145,7 +147,7 @@ class App extends Component {
                   this.getUniqueItems(this.state.rows)
                     .filter((catagory) => { return this.state.catagoryFilter ? catagory === this.state.catagoryFilter : true })
                     .map(catagory => {
-                      return <div key={catagory.toString()} className='catagory'>
+                      return <div key={catagory ? catagory.toString() : 'unknown'} className='catagory'>
                         <h2>{catagory}</h2>
                         {this.state.rows
                           .filter((item) => { return this.state.catagoryFilter ? item[0] === this.state.catagoryFilter : item[0] === catagory })
@@ -172,7 +174,7 @@ class App extends Component {
         {!this.state.dataLoaded &&
           <div className='emptyState'>
           </div>}
-          
+
         <div className='footer'>
           <p>Copyright © 2021 ConnectWise</p>
           <span>Build by Meng Huang</span>
