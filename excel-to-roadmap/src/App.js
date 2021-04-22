@@ -6,8 +6,8 @@ import { data } from './data';
 const STATUS_MAP = {
   shipped: '21-Q1',
   comingSoon: '21-Q2',
-  inTheWorks: '21-Q3',
-  future: '21-Q4'
+  inTheWorks: '21-Q3|21-Q4',
+  future: '22-Q1'
 };
 
 const CATAGORY_MAP = {
@@ -86,7 +86,7 @@ class App extends Component {
       return 'Shipped';
     else if (str === STATUS_MAP.comingSoon)
       return 'ComingSoon';
-    else if (str === STATUS_MAP.inTheWorks)
+    else if (STATUS_MAP.inTheWorks.indexOf(str) != -1)
       return 'InTheWorks';
     else if (str === STATUS_MAP.future)
       return 'Future';
@@ -149,7 +149,7 @@ class App extends Component {
                         <h2>{catagory}</h2>
                         {this.state.rows
                           .filter((item) => { return this.state.catagoryFilter ? item[0] === this.state.catagoryFilter : item[0] === catagory })
-                          .filter((item) => { return this.state.statusFilter ? item[2] === this.state.statusFilter : true })
+                          .filter((item) => { return this.state.statusFilter ? this.state.statusFilter.indexOf(item[2]) != -1 : true })
                           .map((it) => {
                             return <div kep={it.toString()} className='item'>
                               <span className={'is' + this.statusTagPicker(it[2])}>{it[2]}</span>
