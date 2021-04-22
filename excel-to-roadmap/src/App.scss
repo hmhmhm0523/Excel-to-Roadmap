@@ -44,28 +44,39 @@ body,
         box-shadow: 0 10px 14px #e6e6e6;
         position: relative;
         z-index: 2;
-        background-image: url(https://wac-cdn.atlassian.com/dam/jcr:e62e6b1b-9430-4eda-a733-0a053b2f5864/map-road-right.png?cdnVersion=1563),
-            url(https://wac-cdn.atlassian.com/dam/jcr:1437a9b6-36ee-4c2a-9a46-82580072e551/map-road-left.png?cdnVersion=1563);
+        background-image: url(./img/right.png), url(./img/left.png);
         background-position: right center, left center;
         background-repeat: no-repeat, no-repeat;
         background-size: contain, contain;
-        @media only screen and (max-width: 860px) {
+        padding: 50px;
+
+        @media only screen and (max-width: 1400px) {
             background-size: 30vw, 30vw;
             background-position: right top, left bottom;
         }
+
+        @media only screen and (max-width: 860px) {
+            background-size: 50vw, 0vw;
+            background-position: right top, left bottom;
+            align-items: flex-start;
+        }
+
         h1 {
             font-size: 2.75rem;
             line-height: 1.18181818;
             color: #253858;
             letter-spacing: 0;
-            margin: 0 50px;
+            margin: 0;
+            @media only screen and (max-width: 860px) {
+                font-size: 2rem;
+            }
         }
         p {
             color: #42526e;
             font-size: 1.25rem;
             letter-spacing: 0.3px;
             line-height: 1.4;
-            margin: 20px 50px 40px 50px;
+            margin: 20px 0 40px 0;
         }
 
         input[type="file"] {
@@ -89,9 +100,11 @@ body,
         }
 
         .logo {
-            background-image: url("logo.svg");
+            background-image: url("./img/connectWiseLogo.png");
             width: 200px;
+            height: 100px;
             background-repeat: no-repeat;
+            background-size: contain;
         }
     }
 
@@ -112,15 +125,18 @@ body,
             margin-left: auto;
             width: 1440px;
             padding: 0 50px;
+
             @media only screen and (max-width: 860px) {
                 flex-direction: column;
             }
 
             .mainPanel {
                 width: 75%;
+
                 @media only screen and (max-width: 860px) {
                     width: 100%;
                 }
+
                 .catagory {
                     width: 100%;
 
@@ -206,6 +222,7 @@ body,
             .sidePanel {
                 padding-right: 20px;
                 width: 25%;
+
                 @media only screen and (max-width: 860px) {
                     width: 100%;
                 }
@@ -221,6 +238,7 @@ body,
                         display: inline-grid;
                         padding-right: 30px;
                     }
+
                     h4 {
                         padding-left: 20px;
                         text-transform: uppercase;
@@ -256,7 +274,7 @@ body,
     }
 
     .emptyState {
-        background-image: url("./roadmap.jpg");
+        background-image: url("./img/roadmap.jpg");
         background-repeat: no-repeat;
         background-position: center;
         opacity: 0.5;

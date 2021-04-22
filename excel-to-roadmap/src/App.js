@@ -42,8 +42,6 @@ class App extends Component {
         console.log(err);
       }
       else {
-        // console.log(JSON.stringify(this.state.rows));
-        // console.log(JSON.stringify(resp.rows));
         this.setState({
           dataLoaded: true,
           cols: resp.cols,
